@@ -4,7 +4,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 df = pd.read_csv("./jobs.csv")
 vectorizer = TfidfVectorizer(
-    lowercase=True, stop_words="english", ngram_range=(1, 2), max_df=0.85, min_df=2
+    lowercase=True, stop_words="english", max_df=0.85, min_df=2
 )
 
 
@@ -15,6 +15,8 @@ def clean_html(text):
 
 
 ds = df["description"].apply(clean_html)
-print(ds.head())
 X = vectorizer.fit_transform(ds)
-# TODO: transfrom to json <string,num>
+terms = vectorizer.get_feature_names_out()
+idf = vectorizer.idf_
+
+idf_map = {term: float(weight) for term, weight in zip(terms, idf)}
