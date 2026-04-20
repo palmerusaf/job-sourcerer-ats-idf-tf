@@ -22,6 +22,7 @@ df = pd.concat([df, df2], ignore_index=True)
 
 vectorizer = TfidfVectorizer(
     token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z0-9+#.\-]{1,}\b",
+    ngram_range=(1, 2),
     lowercase=True,
     stop_words="english",
     min_df=5,
