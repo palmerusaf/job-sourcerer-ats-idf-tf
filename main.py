@@ -2,6 +2,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+# real job descriptions from personal job tracker
 df = pd.read_csv("./jobs.csv")
 vectorizer = TfidfVectorizer(
     lowercase=True, stop_words="english", max_df=0.85, min_df=2
