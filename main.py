@@ -4,8 +4,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 def clean_html(text):
-    if not isinstance(text, str):
-        return ""
     return BeautifulSoup(text, "html.parser").get_text(" ")
 
 
@@ -21,14 +19,13 @@ df2 = df2["Job Description"].apply(clean_html)
 df = df1["description"].apply(clean_html)
 df = pd.concat([df, df2], ignore_index=True)
 
-vectorizer = TfidfVectorizer(lowercase=True, stop_words="english", min_df=3)
+vectorizer = TfidfVectorizer(
+    token_pattern=r"[a-z0-9+#]+", lowercase=True, stop_words="english", min_df=2
+)
 X = vectorizer.fit_transform(df)
 terms = vectorizer.get_feature_names_out()
 idf = vectorizer.idf_
 
 im = {term: float(weight) for term, weight in zip(terms, idf)}
-im = [[k, v] for k, v in im.items()]
-im.sort(key=lambda i: i[1])
-im = pd.DataFrame(im).tail(40)
-# __AUTO_GENERATED_PRINT_VAR_START__
-print(f" im: {str(im)}")  # __AUTO_GENERATED_PRINT_VAR_END__
+# im = [[k, v] for k, v in im.items()]
+# im.sort(key=lambda i: i[1])
