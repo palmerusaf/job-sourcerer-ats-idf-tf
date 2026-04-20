@@ -19,4 +19,9 @@ X = vectorizer.fit_transform(ds)
 terms = vectorizer.get_feature_names_out()
 idf = vectorizer.idf_
 
-idf_map = {term: float(weight) for term, weight in zip(terms, idf)}
+im = {term: float(weight) for term, weight in zip(terms, idf)}
+im = [[k, v] for k, v in im.items()]
+im.sort(key=lambda i: i[1])
+im = pd.DataFrame(im).tail(40)
+# __AUTO_GENERATED_PRINT_VAR_START__
+print(f" im: {str(im)}")  # __AUTO_GENERATED_PRINT_VAR_END__
