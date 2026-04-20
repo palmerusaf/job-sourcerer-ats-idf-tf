@@ -2,12 +2,6 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-# real job descriptions from personal job tracker
-df = pd.read_csv("./jobs.csv")
-vectorizer = TfidfVectorizer(
-    lowercase=True, stop_words="english", max_df=0.85, min_df=2
-)
-
 
 def clean_html(text):
     if not isinstance(text, str):
@@ -15,8 +9,20 @@ def clean_html(text):
     return BeautifulSoup(text, "html.parser").get_text(" ")
 
 
-ds = df["description"].apply(clean_html)
-X = vectorizer.fit_transform(ds)
+# INFO:
+# real job descriptions from personal job tracker
+df1 = pd.read_csv("./jobs.csv")
+
+# INFO:
+# from kaggle https://www.kaggle.com/datasets/kshitizregmi/jobs-and-job-description
+df2 = pd.read_csv("./job_title_des.csv")
+df2 = df2["Job Description"].apply(clean_html)
+
+df = df1["description"].apply(clean_html)
+df = pd.concat([df, df2], ignore_index=True)
+
+vectorizer = TfidfVectorizer(lowercase=True, stop_words="english", min_df=3)
+X = vectorizer.fit_transform(df)
 terms = vectorizer.get_feature_names_out()
 idf = vectorizer.idf_
 
